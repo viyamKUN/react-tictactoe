@@ -13,6 +13,10 @@ class App extends React.Component<{}, AppState> {
     gamedata: [0, 0, 0, 0, 0, 0, 0, 0, 0],
   };
 
+  checkValidCell(i: number): boolean {
+    return this.state.gamedata[i] === 0;
+  }
+
   updateData(updatedIndex: number) {
     var data = this.state.gamedata;
     data[updatedIndex] = this.state.turn;
@@ -26,7 +30,11 @@ class App extends React.Component<{}, AppState> {
       <div className='game'>
         <div className='game-board'>
           <Board
-            onClick={(i: number) => { this.updateData(i) }}
+            onClick={(i: number) => {
+              if (this.checkValidCell(i)) {
+                this.updateData(i)
+              }
+            }}
             data={this.state.gamedata}
             turn={this.state.turn}
           />
