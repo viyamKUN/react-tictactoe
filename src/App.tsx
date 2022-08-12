@@ -3,24 +3,14 @@ import './App.css';
 
 type SquareProps = {
   onClick(): void
-};
-
-type SquareState = {
   value: string;
 };
 
-class Square extends React.Component<SquareProps, SquareState> {
-  state: SquareState = {
-    value: "",
-  };
-
+class Square extends React.Component<SquareProps> {
   render() {
     return (
-      <button className='square' onClick={() => {
-        this.props.onClick()
-        this.setState(state => ({ value: "X" }))
-      }}>
-        {this.state.value}
+      <button className='square' onClick={() => this.props.onClick()}>
+        {this.props.value}
       </button>
     );
   }
@@ -28,23 +18,27 @@ class Square extends React.Component<SquareProps, SquareState> {
 
 type BoardProps = {
   onClick(i: number): void
+  data: number[]
+  turn: number
 };
 
 class Board extends React.Component<BoardProps> {
-
   render() {
     const renderSquare = (i: number): React.ReactNode => {
+      var value = this.props.data[i] === 1 ? "X" : "O"
+      value = this.props.data[i] === 0 ? "" : value
       return (
         <Square
           onClick={() => this.props.onClick(i)}
+          value={value}
         />
       );
     }
 
-    const status = "Next: X";
+    const label = "Next: ";
     return (
       <div>
-        <div className='status'>{status}</div>
+        <div className='status'>{label}{this.props.turn === 1 ? "X" : "O"}</div>
         <div>
           <div className="board-row">
             {renderSquare(0)}
@@ -82,8 +76,8 @@ class App extends React.Component<{}, AppState> {
   updateData(updatedIndex: number) {
     var data = this.state.gamedata;
     data[updatedIndex] = this.state.turn;
-    this.setState(state => ({gamedata: data}))
-    this.setState(state => ({turn: this.state.turn % 2 + 1}))
+    this.setState(() => ({ gamedata: data }))
+    this.setState(() => ({ turn: this.state.turn % 2 + 1 }))
     console.log(this.state.gamedata)
   }
 
@@ -93,6 +87,8 @@ class App extends React.Component<{}, AppState> {
         <div className='game-board'>
           <Board
             onClick={(i: number) => { this.updateData(i) }}
+            data={this.state.gamedata}
+            turn={this.state.turn}
           />
         </div>
         <div className='game-info'>
