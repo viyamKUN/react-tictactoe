@@ -42,7 +42,7 @@ class Board extends React.Component<BoardProps> {
     }
 
     const status = "Next: X";
-    return(
+    return (
       <div>
         <div className='status'>{status}</div>
         <div>
@@ -67,29 +67,41 @@ class Board extends React.Component<BoardProps> {
   }
 }
 
-function UpdateData(updatedIndex: number) {
-  gamedata[updatedIndex] = turn;
-  turn = turn % 2 + 1;
-  console.log(gamedata)
-}
 
-var turn = 1;
-const gamedata = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+type AppState = {
+  turn: number,
+  gamedata: number[],
+};
 
-function App() {
-  return (
-    <div className='game'>
-      <div className='game-board'>
-        <Board
-          onClick={(i: number) => { UpdateData(i) }}
-        />
+class App extends React.Component<{}, AppState> {
+  state: AppState = {
+    turn: 1,
+    gamedata: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  };
+
+  updateData(updatedIndex: number) {
+    var data = this.state.gamedata;
+    data[updatedIndex] = this.state.turn;
+    this.setState(state => ({gamedata: data}))
+    this.setState(state => ({turn: this.state.turn % 2 + 1}))
+    console.log(this.state.gamedata)
+  }
+
+  render() {
+    return (
+      <div className='game'>
+        <div className='game-board'>
+          <Board
+            onClick={(i: number) => { this.updateData(i) }}
+          />
+        </div>
+        <div className='game-info'>
+          <div>{/* status */}</div>
+          <ol>{/* TODO */}</ol>
+        </div>
       </div>
-      <div className='game-info'>
-        <div>{/* status */}</div>
-        <ol>{/* TODO */}</ol>
-      </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default App;
