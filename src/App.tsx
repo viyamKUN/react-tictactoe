@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 
 type SquareProps = {
@@ -18,7 +18,7 @@ class Square extends React.Component<SquareProps, SquareState> {
     return (
       <button className='square' onClick={() => {
         this.props.onClick()
-        this.setState(state => ({value: "X"}))
+        this.setState(state => ({ value: "X" }))
       }}>
         {this.state.value}
       </button>
@@ -26,42 +26,45 @@ class Square extends React.Component<SquareProps, SquareState> {
   }
 }
 
-interface BoardProps {
+type BoardProps = {
   onClick(i: number): void
-}
+};
 
-function Board(props: BoardProps) {
-  const renderSquare = (i: number): React.ReactNode => {
-    return (
-      <Square
-        onClick={() => props.onClick(i)}
-      />
+class Board extends React.Component<BoardProps> {
+
+  render() {
+    const renderSquare = (i: number): React.ReactNode => {
+      return (
+        <Square
+          onClick={() => this.props.onClick(i)}
+        />
+      );
+    }
+
+    const status = "Next: X";
+    return(
+      <div>
+        <div className='status'>{status}</div>
+        <div>
+          <div className="board-row">
+            {renderSquare(0)}
+            {renderSquare(1)}
+            {renderSquare(2)}
+          </div>
+          <div className="board-row">
+            {renderSquare(3)}
+            {renderSquare(4)}
+            {renderSquare(5)}
+          </div>
+          <div className="board-row">
+            {renderSquare(6)}
+            {renderSquare(7)}
+            {renderSquare(8)}
+          </div>
+        </div>
+      </div >
     );
   }
-
-  const status = "Next: X";
-  return (
-    <div>
-      <div className='status'>{status}</div>
-      <div>
-        <div className="board-row">
-          {renderSquare(0)}
-          {renderSquare(1)}
-          {renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {renderSquare(3)}
-          {renderSquare(4)}
-          {renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {renderSquare(6)}
-          {renderSquare(7)}
-          {renderSquare(8)}
-        </div>
-      </div>
-    </div>
-  );
 }
 
 function UpdateData(updatedIndex: number) {
