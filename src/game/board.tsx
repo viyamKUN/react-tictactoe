@@ -6,6 +6,7 @@ type BoardProps = {
     onClick(i: number): void
     data: number[]
     turn: number
+    status: string
 };
 
 class Board extends React.Component<BoardProps> {
@@ -21,10 +22,9 @@ class Board extends React.Component<BoardProps> {
             );
         }
 
-        const label = "Next: ";
         return (
             <div>
-                <div className='status'>{label}{this.props.turn === 1 ? "X" : "O"}</div>
+                <div className='status'>{this.props.status}</div>
                 <div>
                     <div className="board-row">
                         {renderSquare(0)}
